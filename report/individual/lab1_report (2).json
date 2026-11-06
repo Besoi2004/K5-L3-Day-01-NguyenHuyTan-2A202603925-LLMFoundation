@@ -1,0 +1,167 @@
+{
+ "seed": 6708,
+ "predictions": {
+  "ml_f1": {
+   "text": "F1~ 0.85; precision có thể cao hơn recall vì spam hiếm.",
+   "time": "12:54:08"
+  },
+  "ml_lr": {
+   "text": "lr=0.001 giảm chậm; lr=50 có thể dao động hoặc tăng loss.",
+   "time": "12:54:10"
+  },
+  "dl_curve": {
+   "text": "val loss có thể tăng sau vài epoch; F1 MLP gần LogReg",
+   "time": "12:54:34"
+  },
+  "dl_relu": {
+   "text": "bỏ ReLU làm mạng thành tuyến tính, F1 gần LogReg",
+   "time": "12:54:38"
+  },
+  "emb_search": {
+   "text": "các tin gần nhất phần lớn là spam vì nội dung nhận quà",
+   "time": "12:56:43"
+  },
+  "emb_tricky": {
+   "text": "encoder+LogReg đúng nhiều hơn BoW trên sáu tin né từ khóa",
+   "time": "12:57:44"
+  },
+  "llm_models": {
+   "text": " model lớn có F1 nhỉnh hơn, chi phí cao hơn; chưa chắc hơn embedding.",
+   "time": "13:10:26"
+  },
+  "llm_fewshot": {
+   "text": "few-shot có thể tăng nhẹ F1 nhưng tăng token input và chi phí",
+   "time": "13:10:26"
+  },
+  "tradeoff": {
+   "text": "LogReg và encoder+LogReg có thể ở Pareto; LLM vượt SLA 50 ms",
+   "time": "13:10:26"
+  },
+  "hard_eval": {
+   "text": "điểm giảm mạnh so với test thường; BoW khó với né từ khóa, LLM khó với prompt injection",
+   "time": "13:10:26"
+  }
+ },
+ "checks": {
+  "1.1 vectorize": true,
+  "1.2 sigmoid / predict_proba": true,
+  "1.3 train_logreg": true,
+  "1.4 metrics": true,
+  "2.1 build_mlp": true,
+  "2.2 train_mlp": true,
+  "3.1–3.2 cosine / top_k_similar": true,
+  "3.3 knn_predict": true,
+  "4.2–4.3 prompt / parse_label": true,
+  "4.1 + 4.4 call_openai / llm_classify_batch": true,
+  "tính tay: baseline_accuracy": true,
+  "tính tay: sigmoid_0": true,
+  "tính tay: f1_example": true,
+  "tính tay: cosine_example": true,
+  "tính tay: llm_cost_per_day": true
+ },
+ "experiments": [
+  {
+   "key": "ml_f1",
+   "time": "12:54:08"
+  },
+  {
+   "key": "ml_lr",
+   "time": "12:54:10"
+  },
+  {
+   "key": "dl_curve",
+   "time": "12:54:34"
+  },
+  {
+   "key": "dl_relu",
+   "time": "12:54:38"
+  },
+  {
+   "key": "emb_search",
+   "time": "12:56:43"
+  },
+  {
+   "key": "emb_tricky",
+   "time": "12:57:44"
+  },
+  {
+   "key": "llm_models",
+   "time": "13:10:26"
+  },
+  {
+   "key": "llm_fewshot",
+   "time": "13:10:26"
+  },
+  {
+   "key": "tradeoff",
+   "time": "13:10:26"
+  },
+  {
+   "key": "hard_eval",
+   "time": "13:10:26"
+  }
+ ],
+ "challenge": 0,
+ "results": {
+  "1. BoW + LogReg (tự code)": {
+   "accuracy": 0.9806451612903225,
+   "precision": 0.9714285714285714,
+   "recall": 0.8395061728395061,
+   "f1": 0.9006622516556292,
+   "f1_SUB": 0.9189189189189189,
+   "train_s": 1.8834446070000013,
+   "msg_per_s": 63596.970815520326,
+   "p50_ms": 0.03040000001419685,
+   "p95_ms": 0.05279694995579118,
+   "usd_per_1k": 0.0
+  },
+  "2. BoW + MLP (deep learning)": {
+   "accuracy": 0.984516129032258,
+   "precision": 0.9259259259259259,
+   "recall": 0.9259259259259259,
+   "f1": 0.9259259259259259,
+   "f1_SUB": 0.9743589743589743,
+   "train_s": 4.030824159000076,
+   "msg_per_s": 47585.8237967449,
+   "p50_ms": 0.17959000001610548,
+   "p95_ms": 0.2506099998868194,
+   "usd_per_1k": 0.0
+  },
+  "3a. Encoder (MiniLM) + kNN": {
+   "accuracy": 0.9729032258064516,
+   "precision": 0.8260869565217391,
+   "recall": 0.9382716049382716,
+   "f1": 0.8786127167630059,
+   "f1_SUB": 0.9743589743589743,
+   "train_s": 60.786353786999825,
+   "msg_per_s": 37.869252238195855,
+   "p50_ms": 27.164491999997153,
+   "p95_ms": 38.710382999988724,
+   "usd_per_1k": 0.0
+  },
+  "3b. Encoder (MiniLM) + LogReg": {
+   "accuracy": 0.9870967741935484,
+   "precision": 0.927710843373494,
+   "recall": 0.9506172839506173,
+   "f1": 0.9390243902439024,
+   "f1_SUB": 0.9743589743589743,
+   "train_s": 61.04218177499979,
+   "msg_per_s": 44.58462877785902,
+   "p50_ms": 22.40408899990598,
+   "p95_ms": 33.070329849920185,
+   "usd_per_1k": 0.0
+  },
+  "3c. Encoder (MiniLM) + MLP head": {
+   "accuracy": 0.9896774193548387,
+   "precision": 0.9397590361445783,
+   "recall": 0.9629629629629629,
+   "f1": 0.9512195121951219,
+   "f1_SUB": 1.0,
+   "train_s": 61.71033243599982,
+   "msg_per_s": 43.598848725132854,
+   "p50_ms": 21.80325250003534,
+   "p95_ms": 29.67747100008182,
+   "usd_per_1k": 0.0
+  }
+ }
+}
